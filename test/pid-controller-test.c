@@ -7,8 +7,6 @@
 #include <stdio.h>
 #include "pid-controller.h"
 
-#define VERIFY_ITERATIONS 100
-
 static const double MIN = 100.0;
 static const double MAX = 200.0;
 static const double INITIAL = 200.0;
