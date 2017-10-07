@@ -1,7 +1,10 @@
 cmake_minimum_required(VERSION 2.8)
 
 project(pid-controller)
-set(PROJECT_VERSION 0.1.0)
+set(VERSION_MAJOR 0)
+set(VERSION_MINOR 1)
+set(VERSION_PATCH 0)
+set(PROJECT_VERSION ${VERSION_MAJOR}.${VERSION_MINOR}.${VERSION_PATCH})
 
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Wno-unknown-pragmas -Wextra -pedantic -pedantic-errors -std=gnu99")
 
@@ -10,6 +13,10 @@ include_directories(${PROJECT_SOURCE_DIR}/inc)
 # Libraries
 
 add_library(${PROJECT_NAME} src/pid-controller.c src/pid-controller-util.c)
+if(BUILD_SHARED_LIBS)
+  set_target_properties(${PROJECT_NAME} PROPERTIES VERSION ${PROJECT_VERSION}
+                                                   SOVERSION ${VERSION_MAJOR})
+endif()
 
 # Tests
 
