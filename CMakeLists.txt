@@ -10,6 +10,13 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -std=c99")
 
 include_directories(${PROJECT_SOURCE_DIR}/inc)
 
+if(CMAKE_HOST_UNIX)
+  include(GNUInstallDirs)
+else()
+  set(CMAKE_INSTALL_LIBDIR lib)
+  set(CMAKE_INSTALL_INCLUDEDIR include)
+endif()
+
 # Libraries
 
 add_library(${PROJECT_NAME} src/pid-controller.c src/pid-controller-util.c)
@@ -33,8 +40,8 @@ add_unit_test(pid-controller-test)
 # pkg-config
 
 set(PKG_CONFIG_EXEC_PREFIX "\${prefix}")
-set(PKG_CONFIG_LIBDIR "\${prefix}/lib")
-set(PKG_CONFIG_INCLUDEDIR "\${prefix}/include/${PROJECT_NAME}")
+set(PKG_CONFIG_LIBDIR "\${prefix}/${CMAKE_INSTALL_LIBDIR}")
+set(PKG_CONFIG_INCLUDEDIR "\${prefix}/${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}")
 set(PKG_CONFIG_CFLAGS "-I\${includedir}")
 
 set(PKG_CONFIG_NAME "${PROJECT_NAME}")
@@ -48,9 +55,9 @@ configure_file(
 
 # Install
 
-install(TARGETS ${PROJECT_NAME} DESTINATION lib)
-install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/inc/ DESTINATION include/${PROJECT_NAME})
-install(DIRECTORY ${CMAKE_BINARY_DIR}/pkgconfig/ DESTINATION lib/pkgconfig)
+install(TARGETS ${PROJECT_NAME} DESTINATION ${CMAKE_INSTALL_LIBDIR})
+install(DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/inc/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME})
+install(DIRECTORY ${CMAKE_BINARY_DIR}/pkgconfig/ DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig)
 
 # Uninstall
 
